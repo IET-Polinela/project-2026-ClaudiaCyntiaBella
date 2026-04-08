@@ -1,31 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Daftar Laporan</title>
-</head>
-<body>
-    <h1>Daftar Laporan Masalah Kota</h1>
-    <a href="{% url 'add_report' %}">Tambah Laporan</a>
-    <hr>
+<h1>Daftar Laporan</h1>
+<p><a href="{% url 'add_report' %}">+ Tambah Laporan Baru</a></p>
+<hr>
 
-    {% if reports %}
-        <ul>
-            {% for report in reports %}
-                <li>
-                    <h3>{{ report.title }}</h3>
-                    <p>Kategori: {{ report.category }}</p>
-                    <p>Deskripsi: {{ report.description }}</p>
-                    <p>Lokasi: {{ report.location }}</p>
-                    <p>Status: {{ report.status }}</p>
-                    <p>Dibuat: {{ report.created_at }}</p>
-                    <a href="{% url 'edit_report' report.id %}">Edit</a>
-                    <a href="{% url 'delete_report' report.id %}">Delete</a>
-                </li>
-                <hr>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Belum ada laporan.</p>
+{% for report in reports %}
+    <h3>{{ report.title }}</h3>
+    <p>Kategori: {{ report.category }}</p>
+    <p>Lokasi: {{ report.location }}</p>
+    <p>Status: {{ report.get_status_display }}</p>
+
+    <a href="{% url 'report_detail' report.pk %}">Detail</a>
+    <a href="{% url 'edit_report' report.pk %}">Edit</a>
+    <a href="{% url 'delete_report' report.pk %}">Delete</a>
+
+    {% if report.status == 'REPORTED' %}
+        <form method="post" action="{% url 'update_status' report.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="VERIFIED">
+            <button type="submit">Verify</button>
+        </form>
+    {% elif report.status == 'VERIFIED' %}
+        <form method="post" action="{% url 'update_status' report.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="IN_PROGRESS">
+            <button type="submit">Set In Progress</button>
+        </form>
+    {% elif report.status == 'IN_PROGRESS' %}
+        <form method="post" action="{% url 'update_status' report.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="RESOLVED">
+            <button type="submit">Resolve</button>
+        </form>
     {% endif %}
-</body>
-</html>
+
+    <hr>
+{% empty %}
+    <p>Belum ada laporan.</p>
+{% endfor %}
