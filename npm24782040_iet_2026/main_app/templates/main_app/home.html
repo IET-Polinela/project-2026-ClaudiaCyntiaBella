@@ -1,116 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Home</title>
+{% extends 'base.html' %}
 
-<style>
+{% block title %}Home{% endblock %}
 
-body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:linear-gradient(120deg,#667eea,#764ba2);
-    color:white;
-}
+{% block content %}
+<div class="card page-card overflow-hidden">
+    <div class="card-body p-0">
+        <div class="row g-0 align-items-center">
+            <div class="col-lg-7">
+                <div class="p-4 p-md-5">
+                    <span class="badge rounded-pill bg-primary mb-3 px-3 py-2">
+                        Selamat Datang di Malang City
+                    </span>
 
-/* Navbar */
+                    <h1 class="display-5 fw-bold mb-3">
+                        Laporkan permasalahan kota dengan lebih mudah dan terstruktur.
+                    </h1>
 
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    padding:20px 80px;
-    background:rgba(255,255,255,0.1);
-    backdrop-filter:blur(10px);
-}
+                    <p class="lead text-muted mb-4">
+                        Malang City adalah platform pelaporan masyarakat untuk membantu warga
+                        menyampaikan berbagai masalah di lingkungan sekitar.
+                    </p>
 
-.logo{
-    font-weight:bold;
-    font-size:20px;
-}
+                    <p class="text-muted mb-4">
+                        Silakan buat laporan agar permasalahan yang ada di kota dapat dipantau
+                        dan ditindaklanjuti melalui alur status yang jelas.
+                    </p>
 
-.nav-links a{
-    margin-left:25px;
-    color:white;
-    text-decoration:none;
-    font-weight:500;
-}
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'add_report' %}" class="btn btn-primary btn-lg">Buat Laporan</a>
+                        <a href="{% url 'report_list' %}" class="btn btn-outline-primary btn-lg">Lihat Daftar Laporan</a>
+                    </div>
+                </div>
+            </div>
 
-/* Hero section */
+            <div class="col-lg-5">
+                <div class="h-100 p-4 p-md-5 bg-light d-flex flex-column justify-content-center">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-megaphone-fill text-primary" style="font-size: 4rem;"></i>
+                        <h3 class="fw-bold mt-3">Ayo Peduli Kota</h3>
+                        <p class="text-muted mb-0">
+                            Setiap laporan membantu menciptakan kota yang lebih aman dan nyaman.
+                        </p>
+                    </div>
 
-.hero{
-    text-align:center;
-    margin-top:120px;
-    animation:fadeIn 2s ease;
-}
-
-.hero h1{
-    font-size:50px;
-    margin-bottom:20px;
-}
-
-.hero p{
-    font-size:20px;
-    opacity:0.9;
-}
-
-/* button */
-
-.btn{
-    margin-top:30px;
-    display:inline-block;
-    padding:12px 28px;
-    background:white;
-    color:#333;
-    border-radius:30px;
-    text-decoration:none;
-    font-weight:bold;
-    transition:0.3s;
-}
-
-.btn:hover{
-    transform:scale(1.1);
-}
-
-/* animation */
-
-@keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:translateY(30px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="navbar">
-
-<div class="logo"> Bandar Lampung</div>
-
-<div class="nav-links">
-<a href="/">Home</a>
-<a href="/about/">About</a>
-<a href="/contacts/">Contacts</a>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="p-3 rounded-4 bg-white shadow-sm">
+                                <h6 class="fw-bold mb-1">1. Temukan Masalah</h6>
+                                <p class="text-muted mb-0 small">Catat masalah yang kamu lihat di sekitar kota.</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-3 rounded-4 bg-white shadow-sm">
+                                <h6 class="fw-bold mb-1">2. Kirim Laporan</h6>
+                                <p class="text-muted mb-0 small">Isi data laporan secara jelas agar mudah diproses.</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-3 rounded-4 bg-white shadow-sm">
+                                <h6 class="fw-bold mb-1">3. Pantau Perkembangan</h6>
+                                <p class="text-muted mb-0 small">Lihat perkembangan status laporan sampai selesai.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
 </div>
-
-</div>
-
-<div class="hero">
-
-<h1>Selamat Datang di Website Saya</h1>
-
-<p>
-Website ini dibuat menggunakan Django Framework.
-</p>
-
-<a class="btn" href="/about/">Explore Website</a>
-
-</div>
-
-</body>
-</html>
+{% endblock %}

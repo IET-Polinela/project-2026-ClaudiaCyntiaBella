@@ -1,87 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>About</title>
+{% extends 'base.html' %}
 
-<style>
+{% block title %}About{% endblock %}
 
-body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:linear-gradient(120deg,#43cea2,#185a9d);
-    color:white;
-}
-
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    padding:20px 80px;
-    background:rgba(255,255,255,0.1);
-}
-
-.logo{
-    font-weight:bold;
-}
-
-.nav-links a{
-    margin-left:25px;
-    color:white;
-    text-decoration:none;
-}
-
-.container{
-    text-align:center;
-    margin-top:120px;
-    animation:fadeIn 1.5s ease;
-}
-
-.container h1{
-    font-size:45px;
-}
-
-.container p{
-    width:60%;
-    margin:auto;
-    margin-top:20px;
-    font-size:18px;
-}
-
-@keyframes fadeIn{
-from{opacity:0; transform:translateY(30px);}
-to{opacity:1; transform:translateY(0);}
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="navbar">
-
-<div class="logo">📘 About</div>
-
-<div class="nav-links">
-<a href="/">Home</a>
-<a href="/about/">About</a>
-<a href="/contacts/">Contacts</a>
+{% block content %}
+<div class="card page-card">
+    <div class="card-body p-4">
+        <h1 class="section-title mb-3">Tentang Malang City</h1>
+        <p class="text-muted">
+            Malang City merupakan aplikasi pelaporan masyarakat yang dibuat untuk membantu
+            pengguna menyampaikan laporan terkait permasalahan di lingkungan sekitar.
+        </p>
+    </div>
 </div>
-
-</div>
-
-<div class="container">
-
-<h1>Tentang Website Ini</h1>
-
-<p>
-Website ini dibuat sebagai bagian dari praktikum pemrograman web menggunakan Django.
-</p>
-
-<p>
-Django adalah framework web Python yang membantu pengembang membangun aplikasi web dengan cepat dan terstruktur menggunakan konsep MVC / MTV.
-</p>
-
-</div>
-
-</body>
-</html>
+{% endblock %}
