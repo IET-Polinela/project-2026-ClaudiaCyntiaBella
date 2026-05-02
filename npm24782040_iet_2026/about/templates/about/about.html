@@ -1,15 +1,293 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}About - Malang City{% endblock %}
 
 {% block content %}
-<div class="card page-card">
-    <div class="card-body p-4">
-        <h1 class="section-title mb-3">Tentang Malang City</h1>
-        <p class="text-muted">
-            Malang City merupakan aplikasi pelaporan masyarakat yang dibuat untuk membantu
-            pengguna menyampaikan laporan terkait permasalahan di lingkungan sekitar.
-        </p>
+<div class="about-page">
+    <div class="hero-card page-card mb-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="section-badge mb-3 d-inline-block">
+                    <i class="bi bi-info-circle-fill me-2"></i>Tentang Aplikasi
+                </span>
+                <h1 class="display-title mb-3">Tentang Malang City</h1>
+                <p class="lead-text mb-0">
+                    Malang City merupakan aplikasi pelaporan masyarakat yang dirancang untuk membantu warga
+                    menyampaikan laporan terkait permasalahan di lingkungan sekitar secara lebih cepat,
+                    rapi, dan mudah dipantau.
+                </p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="hero-icon-box mx-auto">
+                    <i class="bi bi-buildings-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="info-card page-card h-100">
+                <div class="card-body">
+                    <div class="icon-box mb-3">
+                        <i class="bi bi-bullseye"></i>
+                    </div>
+                    <h4 class="card-title-custom">Tujuan</h4>
+                    <p class="card-text-custom">
+                        Membantu masyarakat melaporkan permasalahan kota seperti jalan rusak, sampah,
+                        lampu mati, drainase, dan keamanan secara digital.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="info-card page-card h-100">
+                <div class="card-body">
+                    <div class="icon-box mb-3">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                    <h4 class="card-title-custom">Manfaat</h4>
+                    <p class="card-text-custom">
+                        Proses pelaporan menjadi lebih cepat, data lebih terorganisir, dan tindak lanjut
+                        laporan dapat dipantau berdasarkan statusnya.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="info-card page-card h-100">
+                <div class="card-body">
+                    <div class="icon-box mb-3">
+                        <i class="bi bi-bar-chart-line-fill"></i>
+                    </div>
+                    <h4 class="card-title-custom">Dashboard</h4>
+                    <p class="card-text-custom">
+                        Data laporan ditampilkan dalam bentuk statistik dan grafik agar pengguna lebih
+                        mudah memahami kondisi laporan secara keseluruhan.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-card vision-card mb-4">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <h3 class="section-heading mb-3">
+                    <i class="bi bi-eye-fill me-2 text-primary"></i>Visi
+                </h3>
+                <p class="section-paragraph">
+                    Menjadi platform pelaporan masyarakat yang responsif, transparan, dan mudah digunakan
+                    untuk mendukung pelayanan publik yang lebih baik.
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <h3 class="section-heading mb-3">
+                    <i class="bi bi-flag-fill me-2 text-success"></i>Misi
+                </h3>
+                <ul class="mission-list">
+                    <li>Mempermudah masyarakat dalam membuat laporan.</li>
+                    <li>Menyediakan informasi status laporan secara jelas.</li>
+                    <li>Menampilkan data statistik yang informatif dan mudah dipahami.</li>
+                    <li>Mendukung pengelolaan laporan secara lebih efektif.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-card feature-card">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <h3 class="section-heading">Fitur Utama Malang City</h3>
+                <p class="subtle-text mb-0">
+                    Beberapa fitur utama yang tersedia dalam aplikasi ini.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="mini-feature text-center h-100">
+                        <div class="mini-feature-icon mb-3">
+                            <i class="bi bi-file-earmark-text-fill"></i>
+                        </div>
+                        <h6 class="fw-bold">Manajemen Laporan</h6>
+                        <p class="small text-muted mb-0">Membuat, melihat, mengedit, dan menghapus laporan.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="mini-feature text-center h-100">
+                        <div class="mini-feature-icon mb-3">
+                            <i class="bi bi-search"></i>
+                        </div>
+                        <h6 class="fw-bold">Live Search</h6>
+                        <p class="small text-muted mb-0">Mencari laporan secara langsung tanpa reload halaman.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="mini-feature text-center h-100">
+                        <div class="mini-feature-icon mb-3">
+                            <i class="bi bi-window-stack"></i>
+                        </div>
+                        <h6 class="fw-bold">Detail Modal</h6>
+                        <p class="small text-muted mb-0">Melihat detail laporan secara instan melalui popup.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="mini-feature text-center h-100">
+                        <div class="mini-feature-icon mb-3">
+                            <i class="bi bi-pie-chart-fill"></i>
+                        </div>
+                        <h6 class="fw-bold">Dashboard Statistik</h6>
+                        <p class="small text-muted mb-0">Visualisasi data laporan dalam bentuk chart.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    .hero-card{
+        padding: 2.2rem;
+        background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
+        border: 1px solid #e5eefc;
+    }
+
+    .section-badge{
+        background: #eaf2ff;
+        color: #1d4ed8;
+        padding: .5rem .95rem;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: .9rem;
+    }
+
+    .display-title{
+        font-size: 2.6rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: #1f2937;
+    }
+
+    .lead-text{
+        color: #5b6472;
+        font-size: 1.08rem;
+        line-height: 1.8;
+    }
+
+    .hero-icon-box{
+        width: 150px;
+        height: 150px;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1d4ed8, #60a5fa);
+        color: white;
+        font-size: 4rem;
+        box-shadow: 0 18px 35px rgba(29, 78, 216, .18);
+    }
+
+    .info-card{
+        padding: 1.2rem;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .info-card:hover{
+        transform: translateY(-4px);
+        box-shadow: 0 16px 32px rgba(15,23,42,.10);
+    }
+
+    .icon-box{
+        width: 60px;
+        height: 60px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf2ff;
+        color: #2563eb;
+        font-size: 1.5rem;
+    }
+
+    .card-title-custom{
+        font-weight: 800;
+        margin-bottom: .75rem;
+        color: #1f2937;
+    }
+
+    .card-text-custom{
+        color: #6b7280;
+        line-height: 1.7;
+        margin-bottom: 0;
+    }
+
+    .vision-card{
+        padding: 2rem;
+    }
+
+    .section-heading{
+        font-weight: 800;
+        color: #1f2937;
+    }
+
+    .section-paragraph{
+        color: #6b7280;
+        line-height: 1.8;
+        margin-bottom: 0;
+    }
+
+    .mission-list{
+        padding-left: 1.2rem;
+        margin-bottom: 0;
+        color: #6b7280;
+        line-height: 1.9;
+    }
+
+    .feature-card{
+        padding: 1rem;
+    }
+
+    .mini-feature{
+        background: #f8fbff;
+        border: 1px solid #e6eefc;
+        border-radius: 20px;
+        padding: 1.5rem 1rem;
+    }
+
+    .mini-feature-icon{
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        margin: 0 auto;
+        background: #dbeafe;
+        color: #1d4ed8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+    }
+
+    @media (max-width: 768px){
+        .display-title{
+            font-size: 2rem;
+        }
+
+        .hero-card,
+        .vision-card{
+            padding: 1.4rem;
+        }
+
+        .hero-icon-box{
+            width: 110px;
+            height: 110px;
+            font-size: 3rem;
+        }
+    }
+</style>
 {% endblock %}

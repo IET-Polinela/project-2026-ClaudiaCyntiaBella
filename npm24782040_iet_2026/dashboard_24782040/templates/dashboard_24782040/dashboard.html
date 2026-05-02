@@ -1,0 +1,365 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Statistik{% endblock %}
+
+{% block content %}
+<div class="dashboard-header mb-4">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1 class="section-title mb-2">
+                <i class="bi bi-speedometer2 me-2 text-primary"></i>
+                Dashboard Statistik Laporan
+            </h1>
+            <p class="subtle-text mb-0">
+                Halaman ini menampilkan ringkasan visual dari data laporan masyarakat berdasarkan status dan kategori.
+            </p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                <i class="bi bi-bar-chart-fill me-1"></i>
+                Lab Session 7
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card page-card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon bg-primary-subtle text-primary">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <div>
+                    <p class="stat-label mb-1">Total Laporan</p>
+                    <h3 id="totalReports" class="stat-number mb-0">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card page-card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon bg-secondary-subtle text-secondary">
+                    <i class="bi bi-megaphone"></i>
+                </div>
+                <div>
+                    <p class="stat-label mb-1">Reported</p>
+                    <h3 id="reportedCount" class="stat-number mb-0">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card page-card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon bg-warning-subtle text-warning">
+                    <i class="bi bi-arrow-repeat"></i>
+                </div>
+                <div>
+                    <p class="stat-label mb-1">In Progress</p>
+                    <h3 id="progressCount" class="stat-number mb-0">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card page-card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon bg-success-subtle text-success">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <p class="stat-label mb-1">Resolved</p>
+                    <h3 id="resolvedCount" class="stat-number mb-0">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-5">
+        <div class="card page-card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Distribusi Status Laporan</h5>
+                        <p class="subtle-text small mb-0">
+                            Menunjukkan persentase laporan berdasarkan status penanganan.
+                        </p>
+                    </div>
+                    <span class="badge bg-primary-subtle text-primary rounded-pill">Doughnut</span>
+                </div>
+
+                <div class="chart-box">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="card page-card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Distribusi Kategori Laporan</h5>
+                        <p class="subtle-text small mb-0">
+                            Menampilkan jumlah laporan pada setiap kategori masalah.
+                        </p>
+                    </div>
+                    <span class="badge bg-success-subtle text-success rounded-pill">Bar Chart</span>
+                </div>
+
+                <div class="chart-box">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card page-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">5 Laporan Terakhir Dilaporkan</h5>
+                        <p class="subtle-text small mb-0">Data terbaru dengan status REPORTED.</p>
+                    </div>
+                    <i class="bi bi-clock-history fs-3 text-secondary"></i>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Judul</th>
+                                <th>Kategori</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportedTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card page-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">5 Laporan Terakhir Selesai</h5>
+                        <p class="subtle-text small mb-0">Data terbaru dengan status RESOLVED.</p>
+                    </div>
+                    <i class="bi bi-check2-circle fs-3 text-success"></i>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Judul</th>
+                                <th>Kategori</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resolvedTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-header {
+        padding: 24px;
+        border-radius: 24px;
+        background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, .06);
+        border: 1px solid #e6eefc;
+    }
+
+    .stat-card {
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 36px rgba(15, 23, 42, .10);
+    }
+
+    .stat-icon {
+        width: 54px;
+        height: 54px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        font-size: 1.5rem;
+    }
+
+    .stat-label {
+        color: #6b7280;
+        font-size: .9rem;
+        font-weight: 600;
+    }
+
+    .stat-number {
+        font-weight: 800;
+        color: #1f2937;
+    }
+
+    .chart-box {
+        position: relative;
+        min-height: 330px;
+    }
+
+    .chart-box canvas {
+        max-height: 330px;
+    }
+
+    .table td {
+        font-size: .92rem;
+    }
+
+    .table td:first-child {
+        max-width: 260px;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header {
+            padding: 18px;
+        }
+
+        .chart-box {
+            min-height: 260px;
+        }
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    fetch("{% url 'dashboard_24782040:dashboard_data' %}")
+        .then(response => response.json())
+        .then(data => {
+            console.log("Data JSON dari Dashboard:", data);
+
+            const totalReports = data.status_values.reduce((total, value) => total + value, 0);
+            document.getElementById('totalReports').textContent = totalReports;
+
+            const reportedIndex = data.status_labels.indexOf('REPORTED');
+            const progressIndex = data.status_labels.indexOf('IN_PROGRESS');
+            const resolvedIndex = data.status_labels.indexOf('RESOLVED');
+
+            document.getElementById('reportedCount').textContent =
+                reportedIndex !== -1 ? data.status_values[reportedIndex] : 0;
+
+            document.getElementById('progressCount').textContent =
+                progressIndex !== -1 ? data.status_values[progressIndex] : 0;
+
+            document.getElementById('resolvedCount').textContent =
+                resolvedIndex !== -1 ? data.status_values[resolvedIndex] : 0;
+
+            const statusCtx = document.getElementById('statusChart');
+
+            new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.status_labels,
+                    datasets: [{
+                        label: 'Jumlah Laporan',
+                        data: data.status_values,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            const categoryCtx = document.getElementById('categoryChart');
+
+            new Chart(categoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.category_labels,
+                    datasets: [{
+                        label: 'Jumlah Laporan per Kategori',
+                        data: data.category_values,
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+            const reportedTable = document.getElementById('reportedTable');
+            reportedTable.innerHTML = '';
+
+            data.latest_reported.forEach(report => {
+                reportedTable.innerHTML += `
+                    <tr>
+                        <td class="fw-semibold">${report.title}</td>
+                        <td>${report.category}</td>
+                        <td>
+                            <span class="badge rounded-pill bg-secondary">REPORTED</span>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            const resolvedTable = document.getElementById('resolvedTable');
+            resolvedTable.innerHTML = '';
+
+            data.latest_resolved.forEach(report => {
+                resolvedTable.innerHTML += `
+                    <tr>
+                        <td class="fw-semibold">${report.title}</td>
+                        <td>${report.category}</td>
+                        <td>
+                            <span class="badge rounded-pill bg-success">RESOLVED</span>
+                        </td>
+                    </tr>
+                `;
+            });
+        })
+        .catch(error => {
+            console.error("Gagal mengambil data dashboard:", error);
+        });
+});
+</script>
+{% endblock %}

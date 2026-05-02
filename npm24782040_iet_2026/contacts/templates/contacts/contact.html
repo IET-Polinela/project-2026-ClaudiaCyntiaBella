@@ -1,45 +1,277 @@
 {% extends 'base.html' %}
 
-{% block title %}Contact{% endblock %}
+{% block title %}Contact - Malang City{% endblock %}
 
 {% block content %}
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Contact</li>
-    </ol>
-</nav>
+<div class="contact-page">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Contact</li>
+        </ol>
+    </nav>
 
-<div class="card page-card">
-    <div class="card-body p-4 p-md-5">
-        <h1 class="section-title mb-3">Contact</h1>
-        <p class="subtle-text mb-4">Halaman ini berisi informasi kontak pengelola aplikasi Malang City.</p>
-
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="p-4 rounded-4 soft-box h-100">
-                    <i class="bi bi-envelope-fill text-primary fs-3"></i>
-                    <h5 class="mt-3 fw-bold">Email</h5>
-                    <p class="subtle-text mb-0">malangcity@example.com</p>
+    <div class="contact-hero page-card mb-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="section-badge mb-3 d-inline-block">
+                    <i class="bi bi-telephone-fill me-2"></i>Hubungi Kami
+                </span>
+                <h1 class="display-title mb-3">Contact Malang City</h1>
+                <p class="lead-text mb-0">
+                    Halaman ini berisi informasi kontak pengelola aplikasi Malang City.
+                    Jika Anda membutuhkan bantuan, silakan hubungi kami melalui email,
+                    telepon, atau alamat yang tersedia di bawah ini.
+                </p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="hero-icon-box mx-auto">
+                    <i class="bi bi-headset"></i>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="col-md-4">
-                <div class="p-4 rounded-4 soft-box h-100">
-                    <i class="bi bi-telephone-fill text-primary fs-3"></i>
-                    <h5 class="mt-3 fw-bold">Telepon</h5>
-                    <p class="subtle-text mb-0">+62 812 3456 7890</p>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="contact-info-card page-card h-100">
+                <div class="card-body">
+                    <div class="contact-icon mb-3">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <h4 class="contact-title">Email</h4>
+                    <p class="contact-text mb-2">Kirimkan pertanyaan atau masukan Anda melalui email.</p>
+                    <a href="mailto:malangcity@example.com" class="contact-link">malangcity@example.com</a>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="p-4 rounded-4 soft-box h-100">
-                    <i class="bi bi-geo-alt-fill text-primary fs-3"></i>
-                    <h5 class="mt-3 fw-bold">Alamat</h5>
-                    <p class="subtle-text mb-0">Malang, Indonesia</p>
+        <div class="col-md-4">
+            <div class="contact-info-card page-card h-100">
+                <div class="card-body">
+                    <div class="contact-icon mb-3">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <h4 class="contact-title">Telepon</h4>
+                    <p class="contact-text mb-2">Hubungi kami pada jam operasional untuk bantuan cepat.</p>
+                    <a href="tel:+6281234567890" class="contact-link">+62 812 3456 7890</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="contact-info-card page-card h-100">
+                <div class="card-body">
+                    <div class="contact-icon mb-3">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <h4 class="contact-title">Alamat</h4>
+                    <p class="contact-text mb-2">Silakan kunjungi kantor pengelola aplikasi.</p>
+                    <p class="contact-link mb-0">Malang, Indonesia</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="page-card h-100 detail-card">
+                <h3 class="section-heading mb-3">
+                    <i class="bi bi-chat-dots-fill me-2 text-primary"></i>Layanan Bantuan
+                </h3>
+                <p class="section-paragraph">
+                    Tim Malang City siap membantu Anda terkait penggunaan aplikasi,
+                    pengelolaan laporan, kendala login, maupun pertanyaan umum lainnya.
+                </p>
+
+                <div class="support-box mt-4">
+                    <div class="support-item">
+                        <i class="bi bi-clock-fill text-warning"></i>
+                        <div>
+                            <h6 class="mb-1 fw-bold">Jam Operasional</h6>
+                            <p class="mb-0 text-muted">Senin - Jumat, 08.00 - 16.00 WIB</p>
+                        </div>
+                    </div>
+
+                    <div class="support-item">
+                        <i class="bi bi-shield-check text-success"></i>
+                        <div>
+                            <h6 class="mb-1 fw-bold">Layanan Responsif</h6>
+                            <p class="mb-0 text-muted">Kami berusaha merespons pertanyaan secepat mungkin.</p>
+                        </div>
+                    </div>
+
+                    <div class="support-item">
+                        <i class="bi bi-send-fill text-primary"></i>
+                        <div>
+                            <h6 class="mb-1 fw-bold">Saran & Masukan</h6>
+                            <p class="mb-0 text-muted">Kami terbuka terhadap kritik dan saran untuk pengembangan aplikasi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="page-card h-100 detail-card">
+                <h3 class="section-heading mb-3">
+                    <i class="bi bi-link-45deg me-2 text-primary"></i>Akses Cepat
+                </h3>
+                <p class="section-paragraph mb-4">
+                    Gunakan menu berikut untuk langsung menuju halaman penting aplikasi.
+                </p>
+
+                <div class="d-grid gap-3">
+                    <a href="/" class="btn btn-primary btn-lg">
+                        <i class="bi bi-house-door-fill me-2"></i>Kembali ke Home
+                    </a>
+                    <a href="/reports/" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-file-earmark-text-fill me-2"></i>Lihat Daftar Laporan
+                    </a>
+                    <a href="{% url 'dashboard_24782040:dashboard' %}" class="btn btn-outline-success btn-lg">
+                        <i class="bi bi-speedometer2 me-2"></i>Buka Dashboard
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .contact-hero{
+        padding: 2.2rem;
+        background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
+        border: 1px solid #e5eefc;
+    }
+
+    .section-badge{
+        background: #eaf2ff;
+        color: #1d4ed8;
+        padding: .5rem .95rem;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: .9rem;
+    }
+
+    .display-title{
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: #1f2937;
+    }
+
+    .lead-text{
+        color: #5b6472;
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+
+    .hero-icon-box{
+        width: 145px;
+        height: 145px;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #2563eb, #60a5fa);
+        color: white;
+        font-size: 3.7rem;
+        box-shadow: 0 18px 35px rgba(29, 78, 216, .18);
+    }
+
+    .contact-info-card{
+        padding: 1rem;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .contact-info-card:hover{
+        transform: translateY(-4px);
+        box-shadow: 0 16px 32px rgba(15,23,42,.10);
+    }
+
+    .contact-icon{
+        width: 60px;
+        height: 60px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf2ff;
+        color: #2563eb;
+        font-size: 1.5rem;
+    }
+
+    .contact-title{
+        font-weight: 800;
+        color: #1f2937;
+        margin-bottom: .6rem;
+    }
+
+    .contact-text{
+        color: #6b7280;
+        line-height: 1.7;
+    }
+
+    .contact-link{
+        font-weight: 700;
+        color: #2563eb;
+        text-decoration: none;
+    }
+
+    .contact-link:hover{
+        text-decoration: underline;
+    }
+
+    .detail-card{
+        padding: 2rem;
+    }
+
+    .section-heading{
+        font-weight: 800;
+        color: #1f2937;
+    }
+
+    .section-paragraph{
+        color: #6b7280;
+        line-height: 1.8;
+    }
+
+    .support-box{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .support-item{
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #f8fbff;
+        border: 1px solid #e6eefc;
+        border-radius: 18px;
+        padding: 1rem 1.1rem;
+    }
+
+    .support-item i{
+        font-size: 1.4rem;
+        margin-top: .15rem;
+    }
+
+    @media (max-width: 768px){
+        .display-title{
+            font-size: 2rem;
+        }
+
+        .contact-hero,
+        .detail-card{
+            padding: 1.4rem;
+        }
+
+        .hero-icon-box{
+            width: 110px;
+            height: 110px;
+            font-size: 2.8rem;
+        }
+    }
+</style>
 {% endblock %}

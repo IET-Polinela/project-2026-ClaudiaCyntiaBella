@@ -16,11 +16,24 @@
         <p class="subtle-text mb-0">Berikut adalah seluruh laporan yang telah dikirim oleh pengguna.</p>
     </div>
 
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and user.is_admin %}
     <a href="/reports/add/" class="btn btn-primary">
         <i class="bi bi-plus-circle me-1"></i>Tambah Laporan
     </a>
     {% endif %}
+</div>
+
+<div class="card page-card mb-4">
+    <div class="card-body">
+        <label for="searchInput" class="form-label fw-semibold">Live Search Laporan</label>
+        <input 
+            type="text" 
+            id="searchInput" 
+            class="form-control" 
+            placeholder="Cari laporan berdasarkan judul, lokasi, kategori, atau status..."
+        >
+        <small class="text-muted">Contoh: Sampah, Drainase, Jalan Rusak, REPORTED, RESOLVED</small>
+    </div>
 </div>
 
 {% if reports %}
@@ -32,30 +45,38 @@
                     <tr>
                         <th>Judul</th>
                         <th>Lokasi</th>
+                        <th>Kategori</th>
                         <th>Status</th>
                         <th style="width:230px;">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+
+                <tbody id="reportTableBody">
                     {% for report in reports %}
                     <tr>
                         <td class="fw-semibold">{{ report.title }}</td>
                         <td>{{ report.location }}</td>
+                        <td>{{ report.category }}</td>
                         <td>
                             {% if report.status == 'REPORTED' %}
-                                <span class="badge rounded-pill bg-secondary">Reported</span>
+                                <span class="badge rounded-pill bg-secondary">REPORTED</span>
                             {% elif report.status == 'VERIFIED' %}
-                                <span class="badge rounded-pill bg-primary">Verified</span>
+                                <span class="badge rounded-pill bg-primary">VERIFIED</span>
                             {% elif report.status == 'IN_PROGRESS' %}
-                                <span class="badge rounded-pill bg-warning text-dark">In Progress</span>
+                                <span class="badge rounded-pill bg-warning text-dark">IN_PROGRESS</span>
                             {% elif report.status == 'RESOLVED' %}
-                                <span class="badge rounded-pill bg-success">Resolved</span>
+                                <span class="badge rounded-pill bg-success">RESOLVED</span>
                             {% endif %}
                         </td>
                         <td>
-                            <a href="/reports/{{ report.pk }}/" class="btn btn-sm btn-info text-white">Detail</a>
+                            <button 
+                                type="button" 
+                                class="btn btn-sm btn-info text-white detail-btn" 
+                                data-id="{{ report.pk }}">
+                                Detail
+                            </button>
 
-                            {% if user.is_authenticated %}
+                            {% if user.is_authenticated and user.is_admin %}
                                 <a href="/reports/{{ report.pk }}/edit/" class="btn btn-sm btn-warning text-dark">Edit</a>
                                 <a href="/reports/{{ report.pk }}/delete/" class="btn btn-sm btn-danger"
                                    onclick="return confirm('Yakin ingin menghapus laporan ini?')">Hapus</a>
@@ -66,6 +87,11 @@
                 </tbody>
             </table>
         </div>
+
+        <div id="emptyMessage" class="text-center py-4 d-none">
+            <i class="bi bi-search display-5 text-muted"></i>
+            <p class="mt-2 mb-0 text-muted">Data laporan tidak ditemukan.</p>
+        </div>
     </div>
 </div>
 {% else %}
@@ -75,10 +101,145 @@
         <h4 class="mt-3">Belum ada laporan</h4>
         <p class="subtle-text">Silakan tambahkan laporan pertama.</p>
 
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user.is_admin %}
         <a href="/reports/add/" class="btn btn-primary">Tambah Laporan</a>
         {% endif %}
     </div>
 </div>
 {% endif %}
+
+<div class="modal fade" id="reportDetailModal" tabindex="-1" aria-labelledby="reportDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="reportDetailModalLabel" class="modal-title">Detail Laporan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+
+            <div class="modal-body">
+                <h4 id="modalTitle" class="mb-3"></h4>
+
+                <p class="mb-2">
+                    <strong>Kategori:</strong>
+                    <span id="modalCategory"></span>
+                </p>
+
+                <p class="mb-2">
+                    <strong>Status:</strong>
+                    <span id="modalStatus"></span>
+                </p>
+
+                <p class="mb-2">
+                    <strong>Lokasi:</strong>
+                    <span id="modalLocation"></span>
+                </p>
+
+                <p class="mb-1"><strong>Deskripsi:</strong></p>
+                <p id="modalDescription" class="text-muted"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchInput');
+    const reportTableBody = document.getElementById('reportTableBody');
+    const emptyMessage = document.getElementById('emptyMessage');
+
+    let debounceTimer;
+
+    function getStatusBadge(status) {
+        if (status === 'REPORTED') {
+            return '<span class="badge rounded-pill bg-secondary">REPORTED</span>';
+        } else if (status === 'VERIFIED') {
+            return '<span class="badge rounded-pill bg-primary">VERIFIED</span>';
+        } else if (status === 'IN_PROGRESS') {
+            return '<span class="badge rounded-pill bg-warning text-dark">IN_PROGRESS</span>';
+        } else if (status === 'RESOLVED') {
+            return '<span class="badge rounded-pill bg-success">RESOLVED</span>';
+        } else {
+            return '<span class="badge rounded-pill bg-dark">' + status + '</span>';
+        }
+    }
+
+    function renderReports(reports) {
+        reportTableBody.innerHTML = '';
+
+        if (reports.length === 0) {
+            emptyMessage.classList.remove('d-none');
+            return;
+        }
+
+        emptyMessage.classList.add('d-none');
+
+        reports.forEach(report => {
+            reportTableBody.innerHTML += `
+                <tr>
+                    <td class="fw-semibold">${report.title}</td>
+                    <td>${report.location}</td>
+                    <td>${report.category}</td>
+                    <td>${getStatusBadge(report.status)}</td>
+                    <td>
+                        <button 
+                            type="button" 
+                            class="btn btn-sm btn-info text-white detail-btn" 
+                            data-id="${report.id}">
+                            Detail
+                        </button>
+
+                        {% if user.is_authenticated and user.is_admin %}
+                            <a href="/reports/${report.id}/edit/" class="btn btn-sm btn-warning text-dark">Edit</a>
+                            <a href="/reports/${report.id}/delete/" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Yakin ingin menghapus laporan ini?')">Hapus</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    searchInput.addEventListener('keyup', function () {
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(function () {
+            const keyword = searchInput.value;
+
+            fetch(`/reports/search/?q=${encodeURIComponent(keyword)}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Data JSON Live Search:', data);
+                    renderReports(data.reports);
+                })
+                .catch(error => {
+                    console.error('Gagal mengambil data live search:', error);
+                });
+        }, 500);
+    });
+
+    reportTableBody.addEventListener('click', function (event) {
+        if (event.target.classList.contains('detail-btn')) {
+            const reportId = event.target.getAttribute('data-id');
+
+            fetch(`/reports/${reportId}/json/`)
+                .then(response => response.json())
+                .then(report => {
+                    console.log('Data JSON Detail Modal:', report);
+
+                    document.getElementById('modalTitle').textContent = report.title;
+                    document.getElementById('modalCategory').textContent = report.category;
+                    document.getElementById('modalStatus').innerHTML = getStatusBadge(report.status);
+                    document.getElementById('modalLocation').textContent = report.location;
+                    document.getElementById('modalDescription').textContent = report.description;
+
+                    const modal = new bootstrap.Modal(document.getElementById('reportDetailModal'));
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Gagal mengambil detail laporan:', error);
+                });
+        }
+    });
+});
+</script>
 {% endblock %}

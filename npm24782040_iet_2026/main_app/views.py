@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.http import JsonResponse
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
@@ -92,4 +94,42 @@ class ReportUpdateStatusView(AdminRequiredMixin, View):
             messages.error(request, "Perubahan status tidak valid.")
 
         return redirect('report_list')
-    
+
+
+def report_live_search(request):
+    keyword = request.GET.get('q', '')
+
+    reports = Report.objects.filter(
+        Q(title__icontains=keyword) |
+        Q(category__icontains=keyword) |
+        Q(status__icontains=keyword) |
+        Q(location__icontains=keyword)
+    ).order_by('-created_at')[:50]
+
+    data = [
+        {
+            'id': report.id,
+            'title': report.title,
+            'category': report.category,
+            'status': report.status,
+            'location': report.location,
+        }
+        for report in reports
+    ]
+
+    return JsonResponse({'reports': data})
+
+
+def report_detail_json(request, pk):
+    report = get_object_or_404(Report, pk=pk)
+
+    data = {
+        'id': report.id,
+        'title': report.title,
+        'category': report.category,
+        'description': report.description,
+        'location': report.location,
+        'status': report.status,
+    }
+
+    return JsonResponse(data)
