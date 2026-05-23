@@ -17,14 +17,38 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 urlpatterns = [
+
+    # Django Admin
     path('admin/', admin.site.urls),
 
+    # Web Template Routes
     path('', include('main_app.urls')),
     path('about/', include('about.urls')),
     path('contacts/', include('contacts.urls')),
     path('accounts/', include('usermanagement_24782040.urls')),
     path('dashboard/', include('dashboard_24782040.urls')),
 
+    # DRF API Routes
     path('api/', include('main_app.api_urls')),
+    path('api/users/', include('usermanagement_24782040.api_urls')),
+
+    # JWT Authentication
+    path(
+        'api/token/',
+        TokenObtainPairView.as_view(),
+        name='token_obtain_pair'
+    ),
+
+    path(
+        'api/token/refresh/',
+        TokenRefreshView.as_view(),
+        name='token_refresh'
+    ),
+
 ]
