@@ -45,7 +45,10 @@ class ReportViewSet(viewsets.ModelViewSet):
                 'Admin tidak boleh membuat laporan.'
             )
 
-        serializer.save(reporter=user)
+        serializer.save(
+            reporter=user,
+            status='DRAFT'
+        )
 
     def perform_destroy(self, instance):
         user = self.request.user
