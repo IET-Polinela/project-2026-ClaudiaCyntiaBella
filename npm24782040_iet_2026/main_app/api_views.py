@@ -1,28 +1,45 @@
+from django.db.models import Q
 from rest_framework import viewsets, permissions
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Report
 from .serializers import ReportSerializer
 from .permissions import IsOwnerAndDraftOrReadOnly
 
 
+class ReportPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+
 class ReportViewSet(viewsets.ModelViewSet):
     serializer_class = ReportSerializer
+    pagination_class = ReportPagination
 
     def get_queryset(self):
         user = self.request.user
 
-        if user.is_authenticated and user.is_admin:
-            return Report.objects.exclude(
-                status='DRAFT'
-            ).order_by('-created_at')
+        if not user.is_authenticated:
+            return Report.objects.none()
 
-        if user.is_authenticated:
-            return Report.objects.filter(
-                reporter=user
-            ).order_by('-created_at')
+        queryset = Report.objects.all().order_by('-updated_at')
 
-        return Report.objects.none()
+        tab = self.request.query_params.get('tab', None)
+
+        if user.is_admin:
+            return queryset.exclude(status='DRAFT')
+
+        if tab == 'my_reports':
+            return queryset.filter(reporter=user)
+
+        if tab == 'feed':
+            return queryset.exclude(status='DRAFT')
+
+        return queryset.filter(
+            Q(reporter=user) | ~Q(status='DRAFT')
+        )
 
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'destroy']:

@@ -50,11 +50,30 @@ const routes = {
                         <i class="bi bi-list-check"></i>
                     </div>
                     <h4 class="fw-bold">Menu Warga</h4>
-                    <p class="text-muted small">Kelola laporan kota dengan mudah.</p>
+                    <p class="text-muted small">Rekap status laporan saya.</p>
                     <hr>
-                    <button class="btn btn-soft-primary w-100 fw-semibold">
+
+                    <div class="timeline-step">
+                        <i class="bi bi-file-earmark-text-fill"></i>
+                        <span>Draft</span>
+                        <strong class="ms-auto" id="draftCount">0</strong>
+                    </div>
+
+                    <div class="timeline-step">
+                        <i class="bi bi-hourglass-split"></i>
+                        <span>Diproses</span>
+                        <strong class="ms-auto" id="progressCount">0</strong>
+                    </div>
+
+                    <div class="timeline-step">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Selesai</span>
+                        <strong class="ms-auto" id="doneCount">0</strong>
+                    </div>
+
+                    <button class="btn btn-soft-primary w-100 fw-semibold mt-3" onclick="openCreateModal()">
                         <i class="bi bi-plus-circle-fill me-1"></i>
-                        Buat Laporan
+                        Tambah Laporan Baru
                     </button>
                 </div>
             </aside>
@@ -66,44 +85,29 @@ const routes = {
                             <i class="bi bi-megaphone-fill"></i>
                         </div>
                         <div>
-                            <h2 class="fw-bold mb-1">Halo, Citizen!</h2>
-                            <p class="text-muted mb-0">Selamat datang di Dashboard Smart City Tracker</p>
+                            <h2 class="fw-bold mb-1">Dashboard Citizen</h2>
+                            <p class="text-muted mb-0">Fetching API & API Optimization</p>
                         </div>
                     </div>
 
-                    <div class="p-4 rounded-4 mb-4" style="background:#eff6ff;">
-                        <h4 class="fw-bold mb-2">Laporkan Masalah Kota</h4>
-                        <p class="text-muted mb-0">
-                            Warga dapat membuat laporan awal sebagai draft, lalu mengirimkannya
-                            agar dapat diproses oleh admin.
-                        </p>
-                    </div>
+                    <ul class="nav nav-pills mb-4">
+                        <li class="nav-item">
+                            <button class="nav-link active" id="myReportsTab" onclick="switchTab('my_reports')">
+                                <i class="bi bi-person-lines-fill me-1"></i>
+                                Laporan Saya
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" id="feedTab" onclick="switchTab('feed')">
+                                <i class="bi bi-broadcast-pin me-1"></i>
+                                Feed Kota
+                            </button>
+                        </li>
+                    </ul>
 
-                    <div class="row g-3">
-                        <div class="col-12 col-md-4">
-                            <div class="stat-card p-3 rounded-4 bg-white shadow-sm">
-                                <i class="bi bi-file-earmark-text-fill text-primary"></i>
-                                <div class="fw-bold mt-2">Draft</div>
-                                <small class="text-muted">Laporan awal</small>
-                            </div>
-                        </div>
+                    <div id="listContainer"></div>
 
-                        <div class="col-12 col-md-4">
-                            <div class="stat-card p-3 rounded-4 bg-white shadow-sm">
-                                <i class="bi bi-send-fill text-primary"></i>
-                                <div class="fw-bold mt-2">Reported</div>
-                                <small class="text-muted">Dikirim warga</small>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-4">
-                            <div class="stat-card p-3 rounded-4 bg-white shadow-sm">
-                                <i class="bi bi-hourglass-split text-primary"></i>
-                                <div class="fw-bold mt-2">Progress</div>
-                                <small class="text-muted">Diproses admin</small>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="paginationContainer" class="mt-4"></div>
                 </div>
             </section>
 
@@ -138,7 +142,7 @@ const routes = {
 
                     <div class="timeline-step">
                         <i class="bi bi-check-circle-fill"></i>
-                        <span>Completed</span>
+                        <span>Resolved</span>
                     </div>
                 </div>
             </aside>
@@ -158,6 +162,10 @@ function handleRouting() {
 
     if (hash === "#login" && typeof setupLoginForm === "function") {
         setupLoginForm();
+    }
+
+    if (hash === "#dashboard" && typeof initializeDashboard === "function") {
+        initializeDashboard();
     }
 }
 

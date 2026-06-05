@@ -42,8 +42,8 @@
         }
 
         .glass-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 24px 55px rgba(37,99,235,0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 24px 55px rgba(37,99,235,0.18);
         }
 
         .soft-icon {
@@ -98,13 +98,65 @@
             color: #2563eb;
         }
 
-        @keyframes floating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
         .spa-container {
             min-height: calc(100vh - 85px);
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 20px;
+            background-color: #e5e7eb;
+        }
+
+        .report-card {
+            border-radius: 18px;
+            border: 1px solid rgba(147,197,253,0.25);
+            transition: 0.25s ease;
+        }
+
+
+        .report-grid-card {
+            min-height: 260px;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid rgba(147,197,253,0.35);
+            box-shadow: 0 16px 38px rgba(37,99,235,0.12);
+            transition: 0.28s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-grid-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 55px rgba(37,99,235,0.22);
+        }
+
+        .report-grid-card::before {
+            content: "";
+            position: absolute;
+            top: -45px;
+            right: -45px;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: rgba(96,165,250,0.18);
+        }
+
+        .report-status-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #dbeafe;
+            color: #2563eb;
+            font-size: 1.5rem;
+        }
+
+        .report-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 30px rgba(37,99,235,0.12);
         }
     </style>
 </head>
@@ -124,6 +176,58 @@
 </nav>
 
 <main class="container-fluid px-4 mt-4 spa-container" id="app-content"></main>
+
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="reportModalLabel">
+                    <i class="bi bi-file-earmark-plus-fill text-primary me-1"></i>
+                    Form Laporan
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="reportForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Judul Laporan</label>
+                        <input type="text" class="form-control" id="reportTitle" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Kategori</label>
+                        <input type="text" class="form-control" id="reportCategory" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Lokasi</label>
+                        <input type="text" class="form-control" id="reportLocation" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Deskripsi</label>
+                        <textarea class="form-control" id="reportDescription" rows="4" required></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-primary w-50" id="saveDraftBtn">
+                            <i class="bi bi-save-fill me-1"></i>
+                            Simpan Draft
+                        </button>
+
+                        <button type="button" class="btn btn-soft-primary w-50" id="submitReportBtn">
+                            <i class="bi bi-send-fill me-1"></i>
+                            Ajukan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="js/api.js"></script>
 <script src="js/auth.js"></script>
