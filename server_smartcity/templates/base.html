@@ -174,17 +174,27 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link {% if '/dashboard/' in request.path %}active-link{% endif %}" href="{% url 'dashboard_24782040:dashboard' %}">
-                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
-                    </a>
-                </li>
+                {% if user.is_authenticated and user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/dashboard/' in request.path %}active-link{% endif %}" href="{% url 'dashboard_24782040:dashboard' %}">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link {% if '/reports/' in request.path %}active-link{% endif %}" href="/reports/">
-                        <i class="bi bi-file-earmark-text me-1"></i>Reports
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/reports/' in request.path %}active-link{% endif %}" href="{% url 'report_list' %}">
+                            <i class="bi bi-file-earmark-text me-1"></i>Reports
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if user.is_authenticated and not user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://127.0.0.1:5500/index.html#dashboard" target="_blank">
+                            <i class="bi bi-plus-circle me-1"></i>Portal Citizen
+                        </a>
+                    </li>
+                {% endif %}
 
                 <li class="nav-item">
                     <a class="nav-link {% if '/about/' in request.path %}active-link{% endif %}" href="/about/">
@@ -207,9 +217,12 @@
                     </li>
 
                     <li class="nav-item mt-2 mt-lg-0">
-                        <a class="btn logout-btn px-3" href="{% url 'logout' %}">
-                            <i class="bi bi-box-arrow-right me-1"></i>Logout
-                        </a>
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn logout-btn px-3">
+                                <i class="bi bi-box-arrow-right me-1"></i>Logout
+                            </button>
+                        </form>
                     </li>
                 {% else %}
                     <li class="nav-item mt-2 mt-lg-0">

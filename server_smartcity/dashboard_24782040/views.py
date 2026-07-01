@@ -1,16 +1,39 @@
-from django.views.generic import TemplateView
-from django.http import JsonResponse
+from django.contrib import messages
 from django.db.models import Count
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.views.generic import TemplateView
+
 from main_app.models import Report
 
 
-class DashboardView(TemplateView):
+class AdminDashboardRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Anda harus login terlebih dahulu.')
+            return redirect('login')
+
+        if not request.user.is_admin:
+            messages.error(request, 'Anda tidak dapat mengakses dashboard admin.')
+            return redirect('home')
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class DashboardView(AdminDashboardRequiredMixin, TemplateView):
     template_name = 'dashboard_24782040/dashboard.html'
 
 
 def dashboard_data(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    if not request.user.is_admin:
+        return JsonResponse({'error': 'Forbidden'}, status=403)
+
     status_data = (
         Report.objects
+        .exclude(status='DRAFT')
         .values('status')
         .annotate(total=Count('id'))
         .order_by('status')
@@ -18,6 +41,7 @@ def dashboard_data(request):
 
     category_data = (
         Report.objects
+        .exclude(status='DRAFT')
         .values('category')
         .annotate(total=Count('id'))
         .order_by('category')

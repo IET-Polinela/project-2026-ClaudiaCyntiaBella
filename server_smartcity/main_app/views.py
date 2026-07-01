@@ -20,33 +20,28 @@ class AdminRequiredMixin:
             return redirect('login')
 
         if not request.user.is_admin:
-            messages.error(request, 'Anda tidak dapat mengakses fitur ini.')
-            return redirect('report_list')
+            messages.error(request, 'Anda tidak dapat mengakses fitur admin.')
+            return redirect('home')
 
         return super().dispatch(request, *args, **kwargs)
 
 
-class ReportListView(ListView):
+class ReportListView(AdminRequiredMixin, ListView):
     model = Report
     template_name = 'main_app/report_list.html'
     context_object_name = 'reports'
 
     def get_queryset(self):
-        user = self.request.user
-
-        if user.is_authenticated and user.is_admin:
-            return Report.objects.exclude(status='DRAFT').order_by('-updated_at')
-
-        if user.is_authenticated:
-            return Report.objects.filter(reporter=user).order_by('-updated_at')
-
-        return Report.objects.none()
+        return Report.objects.exclude(status='DRAFT').order_by('-updated_at')
 
 
-class ReportDetailView(DetailView):
+class ReportDetailView(AdminRequiredMixin, DetailView):
     model = Report
     template_name = 'main_app/report_detail.html'
     context_object_name = 'report'
+
+    def get_queryset(self):
+        return Report.objects.exclude(status='DRAFT')
 
 
 class ReportCreateView(CreateView):
@@ -56,8 +51,8 @@ class ReportCreateView(CreateView):
     success_url = reverse_lazy('report_list')
 
     def dispatch(self, request, *args, **kwargs):
-        messages.error(request, "Pembuatan laporan dilakukan melalui Citizen SPA.")
-        return redirect('report_list')
+        messages.error(request, 'Pembuatan laporan dilakukan melalui Citizen SPA.')
+        return redirect('home')
 
 
 class ReportUpdateView(UpdateView):
@@ -67,8 +62,11 @@ class ReportUpdateView(UpdateView):
     success_url = reverse_lazy('report_list')
 
     def dispatch(self, request, *args, **kwargs):
-        messages.error(request, "Admin tidak boleh mengubah isi laporan. Admin hanya boleh memperbarui status.")
-        return redirect('report_list')
+        messages.error(
+            request,
+            'Admin tidak boleh mengubah isi laporan. Admin hanya boleh memperbarui status.'
+        )
+        return redirect('report_list' if request.user.is_authenticated and request.user.is_admin else 'home')
 
 
 class ReportDeleteView(DeleteView):
@@ -78,13 +76,13 @@ class ReportDeleteView(DeleteView):
     success_url = reverse_lazy('report_list')
 
     def dispatch(self, request, *args, **kwargs):
-        messages.error(request, "Admin tidak boleh menghapus laporan.")
-        return redirect('report_list')
+        messages.error(request, 'Admin tidak boleh menghapus laporan.')
+        return redirect('report_list' if request.user.is_authenticated and request.user.is_admin else 'home')
 
 
 class ReportUpdateStatusView(AdminRequiredMixin, View):
     def post(self, request, pk):
-        report = get_object_or_404(Report, pk=pk)
+        report = get_object_or_404(Report.objects.exclude(status='DRAFT'), pk=pk)
         new_status = request.POST.get('status')
 
         valid_transitions = {
@@ -99,22 +97,33 @@ class ReportUpdateStatusView(AdminRequiredMixin, View):
         if new_status == allowed_next_status:
             report.status = new_status
             report.save()
-            messages.success(request, f"Status laporan berhasil diubah menjadi {new_status}.")
+            messages.success(request, f'Status laporan berhasil diubah menjadi {new_status}.')
         else:
-            messages.error(request, "Perubahan status tidak valid.")
+            messages.error(request, 'Perubahan status tidak valid.')
 
         return redirect('report_list')
 
 
 def report_live_search(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    if not request.user.is_admin:
+        return JsonResponse({'error': 'Forbidden'}, status=403)
+
     keyword = request.GET.get('q', '')
 
-    reports = Report.objects.filter(
-        Q(title__icontains=keyword) |
-        Q(category__icontains=keyword) |
-        Q(status__icontains=keyword) |
-        Q(location__icontains=keyword)
-    ).order_by('-created_at')[:50]
+    reports = (
+        Report.objects
+        .exclude(status='DRAFT')
+        .filter(
+            Q(title__icontains=keyword) |
+            Q(category__icontains=keyword) |
+            Q(status__icontains=keyword) |
+            Q(location__icontains=keyword)
+        )
+        .order_by('-created_at')[:50]
+    )
 
     data = [
         {
@@ -127,11 +136,20 @@ def report_live_search(request):
         for report in reports
     ]
 
-    return JsonResponse({'reports': data})
+    return JsonResponse({
+        'reports': data,
+        'results': data,
+    })
 
 
 def report_detail_json(request, pk):
-    report = get_object_or_404(Report, pk=pk)
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    if not request.user.is_admin:
+        return JsonResponse({'error': 'Forbidden'}, status=403)
+
+    report = get_object_or_404(Report.objects.exclude(status='DRAFT'), pk=pk)
 
     data = {
         'id': report.id,
